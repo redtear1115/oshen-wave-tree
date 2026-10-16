@@ -73,6 +73,15 @@ th{font-family:var(--f-mono);font-size:15px;color:var(--muted);border-bottom:3px
 .src{font-family:var(--f-mono);font-size:14px;color:var(--muted);margin-top:auto}
 .sky .src{color:#eef0ff}
 
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f-body);fill:var(--paper-ink)}
+.chart .val,.chart .tick{font-family:var(--f-mono)}
+.chart .muted-t{fill:var(--muted)}
+.chart-title{font-weight:700;font-size:19px;margin-bottom:4px}
+.chart-sub{font-size:15px;color:var(--muted);margin-bottom:10px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px;margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
 nav{position:fixed;right:18px;bottom:16px;display:flex;gap:10px;align-items:center;z-index:5}
 nav button{font-family:var(--f-mono);font-weight:600;font-size:16px;background:var(--paper);color:var(--ink);border:var(--bd);border-radius:10px;box-shadow:3px 3px 0 var(--ink);width:44px;height:40px;cursor:pointer}
 nav button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
@@ -159,7 +168,7 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
   <h2>3-30-300：每一個數字都要一種視角</h2>
   <div class="grid3">
     <div class="card"><div class="big">3</div><h3 style="margin-top:14px">窗前看得見 3 棵樹</h3><p class="muted">要 3D 與建物內部：從每戶、每層的窗外看</p></div>
-    <div class="card"><div class="big">30<small>%</small></div><h3 style="margin-top:14px">綠覆率 30%</h3><p class="muted">2021 年約 18%。2D 地圖算面積比例</p></div>
+    <div class="card"><div class="big">30<small>%</small></div><h3 style="margin-top:14px">綠覆率 30%</h3><div class="chart" data-chart="canopy" role="img" aria-label="綠覆率 2021 年約 18%，目標 30%"></div><p class="muted">2D 地圖算面積比例</p></div>
     <div class="card"><div class="big">300<small>m</small></div><h3 style="margin-top:14px">300 公尺內有綠蔭公園</h3><p class="muted">2D 步行距離</p></div>
   </div>
   <p class="lead" style="margin-top:30px">政見第三項改革「涼感地圖與市民參與」：串接樹籍、氣象、體感溫度與<b>市民回報</b>，回報熱點作為增設樹木的依據。</p>
@@ -241,13 +250,36 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
   </div>
   <div class="grid2" style="margin-top:26px">
     <div class="card yellow"><div class="big" style="font-size:52px">16,781</div><p style="margin-top:8px"><b>候選空樹穴</b>：1.5 m 內沒有登錄的樹。遠超 3,164，但要現場抽查（可能座標偏移或新植未登錄）</p></div>
-    <div class="card cream"><div class="big" style="font-size:52px">47.4<small>km</small></div><p style="margin-top:8px"><b>寬而無樹的人行道</b>：淨寬 ≥ 2.5 m 且整段沒行道樹，共 798 段</p></div>
+    <div class="card cream">
+      <div class="chart-title">寬而無樹的人行道</div>
+      <div class="chart-sub">整段沒行道樹，依淨寬門檻（km）</div>
+      <div class="chart" data-chart="widths" role="img" aria-label="淨寬 2 公尺以上 91.6 公里、2.5 公尺以上 47.4 公里、3 公尺以上 28.5 公里"></div>
+    </div>
   </div>
+</section>
+
+<!-- 8b -->
+<section class="slide paper">
+  <div class="kicker">08 · 樹蔭公平</div>
+  <h2>大安區每公里人行道的行道樹，是文山區的 2.6 倍</h2>
+  <div class="grid2 grow">
+    <div>
+      <div class="chart-title">每公里人行道的行道樹（棵）</div>
+      <div class="chart-sub">行道樹數 ÷ 人行道長度；樹含安全島與綠帶</div>
+      <div class="chart" data-chart="density" role="img" aria-label="各區每公里人行道行道樹數，文山 44 到北投 132，全市 74"></div>
+    </div>
+    <div>
+      <div class="chart-title">候選空樹穴（個）</div>
+      <div class="chart-sub">1.5 m 內沒有登錄的樹，共 16,781 個，需現場抽查</div>
+      <div class="chart" data-chart="empty" role="img" aria-label="各區候選空樹穴數，中正區最多 2,866 個"></div>
+    </div>
+  </div>
+  <div class="src">資料：公園處行道樹、新工處人行道範圍與樹穴、公園處樹穴；2026-10-16 下載</div>
 </section>
 
 <!-- 9 -->
 <section class="slide paper">
-  <div class="kicker">08 · 資料缺口</div>
+  <div class="kicker">09 · 資料缺口</div>
   <h2>缺的部分：用推估、模擬或 OSM 補上</h2>
   <table>
     <tr><th>缺什麼</th><th>影響</th><th>當天怎麼補</th></tr>
@@ -255,14 +287,17 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
     <tr><td>公園邊界</td><td>公園資料只有中心點</td><td>用 OpenStreetMap 補：四分之三的公園（622／813）找得到範圍，其中約六成面積與官方差 20% 內；其餘用中心點估</td></tr>
     <tr><td>3D 建物</td><td>不在這批資料</td><td>模擬樓高做一個街廓</td></tr>
     <tr><td>移除紀錄、回報、評價</td><td>未開放 / 尚不存在</td><td>模擬資料，README 與畫面標明</td></tr>
-    <tr><td>溫度、人流</td><td>不在這批資料</td><td>列入未來展望</td></tr>
   </table>
-  <p class="muted" style="margin-top:20px">Google Maps 不能拿來抓公園邊界：Places API 只給點與框，條款也禁止擷取幾何存檔。</p>
+  <div style="margin-top:18px">
+    <div class="chart-title" style="font-size:17px">813 座公園的範圍從哪來</div>
+    <div class="chart" data-chart="parks" role="img" aria-label="同名對上 506 座、中心點在範圍內 96 座、交叉口 20 座、沒有範圍 191 座"></div>
+  </div>
+  <p class="muted" style="margin-top:10px;font-size:16px">Google Maps 不能拿來抓公園邊界：Places API 只給點與框，條款也禁止擷取幾何存檔。</p>
 </section>
 
 <!-- 10 -->
 <section class="slide paper">
-  <div class="kicker">09 · 補種優先分數</div>
+  <div class="kicker">10 · 補種優先分數</div>
   <h2>市民需求和開放資料一起排序</h2>
   <div class="formula">Score = w₁·Demand + w₂·ShadeGap + w₃·Ready + w₄·Equity</div>
   <div class="grid4">
@@ -281,7 +316,7 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
 
 <!-- 11 -->
 <section class="slide sky">
-  <div class="kicker">10 · 2 分鐘 Demo 腳本</div>
+  <div class="kicker">11 · 2 分鐘 Demo 腳本</div>
   <h2>一個市民、一位承辦，走完一次</h2>
   <div class="card" style="padding:26px 30px">
     <ol style="padding-left:1.3em">
@@ -297,7 +332,7 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
 
 <!-- 12 -->
 <section class="slide paper">
-  <div class="kicker">11 · 技術與時程</div>
+  <div class="kicker">12 · 技術與時程</div>
   <h2>資料松前處理好，當天只做介面與流程</h2>
   <div class="grid2 grow">
     <div class="card">
@@ -325,7 +360,7 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
 
 <!-- 13 -->
 <section class="slide paper">
-  <div class="kicker">12 · 未來展望</div>
+  <div class="kicker">13 · 未來展望</div>
   <h2>每多一份資料，就把一個模擬換成真的</h2>
   <table>
     <tr><th>加入的資料</th><th>可以做成什麼</th></tr>
@@ -341,7 +376,7 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
 
 <!-- 14 -->
 <section class="slide sky">
-  <div class="kicker">13 · 今天要討論的</div>
+  <div class="kicker">14 · 今天要討論的</div>
   <h2>需要大家決定的事</h2>
   <div class="grid2">
     <div class="card">
@@ -370,6 +405,96 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
   <button id="next" aria-label="下一頁">→</button>
 </nav>
 
+<script>
+// Charts: plain SVG, data computed by scripts in this repo from material/ (2026-10-16).
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const C = {bar: '#4459d1', barQuiet: '#b9c2f0', ink: '#14182b', grid: '#d7dbee',
+             good: '#3e8441', goodTrack: '#d8ead4', parks: ['#3e8441', '#5f74f7', '#c98a10', '#d6daeb']};
+  const fmt = v => v.toLocaleString('en-US');
+  const el = (tag, attrs, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const svg = (w, h, label) => el('svg', {viewBox: `0 0 ${w} ${h}`, 'aria-hidden': 'true', focusable: 'false', 'data-label': label});
+  // bar with a 4px rounded data end, square at the baseline
+  const barPath = (x, y, w, h) => w <= 4 ? `M${x},${y}h${w}v${h}h${-w}z`
+    : `M${x},${y}h${w - 4}a4,4 0 0 1 4,4v${h - 8}a4,4 0 0 1 -4,4h${-(w - 4)}z`;
+
+  function hbar(host, rows, {unit = '', ref, emphasis = [], decimals = 0, rowH = 34}) {
+    const W = 560, labelW = 64, valW = 76, thick = 18, top = ref ? 26 : 4;
+    const H = top + rows.length * rowH;
+    const max = Math.max(...rows.map(r => r.v), ref ? ref.v : 0);
+    const x = v => labelW + (v / max) * (W - labelW - valW);
+    const s = svg(W, H);
+    if (ref) {
+      s.append(el('line', {x1: x(ref.v), x2: x(ref.v), y1: 18, y2: H, stroke: C.ink, 'stroke-width': 1.5}));
+      s.append(el('text', {x: x(ref.v), y: 12, 'text-anchor': 'middle', 'font-size': 14, class: 'muted-t'}, `${ref.label} ${ref.v.toFixed(decimals)}`));
+    }
+    s.append(el('line', {x1: labelW, x2: labelW, y1: top - 4, y2: H, stroke: C.grid, 'stroke-width': 1}));
+    rows.forEach((r, i) => {
+      const y = top + i * rowH + (rowH - thick) / 2;
+      const strong = !emphasis.length || emphasis.includes(r.k);
+      const g = el('g', {});
+      g.append(el('title', {}, `${r.k}：${r.v.toFixed(decimals)}${unit}`));
+      g.append(el('rect', {x: 0, y: top + i * rowH, width: W, height: rowH, fill: 'transparent'}));  // hover target
+      g.append(el('path', {d: barPath(labelW, y, x(r.v) - labelW, thick), fill: strong ? C.bar : C.barQuiet}));
+      g.append(el('text', {x: labelW - 10, y: y + thick / 2 + 5, 'text-anchor': 'end', 'font-size': 16, 'font-weight': strong && emphasis.length ? 700 : 400}, r.k));
+      g.append(el('text', {x: x(r.v) + 8, y: y + thick / 2 + 5, 'font-size': 15, class: 'val', stroke: '#fff', 'stroke-width': 4, 'paint-order': 'stroke'}, fmt(+r.v.toFixed(decimals)) + unit));
+      s.append(g);
+    });
+    host.append(s);
+  }
+
+  function meter(host, {now, goal, nowLabel, goalLabel}) {
+    const W = 300, H = 46, h = 14, y = 6;
+    const s = svg(W, H);
+    s.append(el('rect', {x: 0, y, width: W, height: h, rx: 4, fill: C.goodTrack}));
+    s.append(el('path', {d: barPath(0, y, (now / goal) * W, h), fill: C.good}));
+    s.append(el('text', {x: (now / goal) * W, y: y + h + 20, 'text-anchor': 'middle', 'font-size': 14, class: 'val'}, nowLabel));
+    s.append(el('text', {x: W, y: y + h + 20, 'text-anchor': 'end', 'font-size': 14, class: 'val muted-t'}, goalLabel));
+    host.append(s);
+  }
+
+  function stack(host, parts) {
+    const W = 1000, H = 30, gap = 2, total = parts.reduce((a, p) => a + p.v, 0);
+    const s = svg(W, H);
+    let x0 = 0;
+    parts.forEach((p, i) => {
+      const w = (p.v / total) * W - (i < parts.length - 1 ? gap : 0);
+      const g = el('g', {});
+      g.append(el('title', {}, `${p.k}：${p.v} 座`));
+      g.append(el('rect', {x: x0, y: 0, width: Math.max(w, 1), height: H, rx: i === 0 || i === parts.length - 1 ? 4 : 0, fill: p.c}));
+      if (w > 90) g.append(el('text', {x: x0 + 10, y: H / 2 + 6, 'font-size': 17, class: 'val', fill: p.light ? C.ink : '#fff', style: `fill:${p.light ? C.ink : '#fff'}`}, `${p.v}`));
+      s.append(g);
+      x0 += w + gap;
+    });
+    host.append(s);
+    const lg = document.createElement('div');
+    lg.className = 'legend';
+    lg.innerHTML = parts.map(p => `<span><i style="background:${p.c}"></i>${p.k} ${p.v}</span>`).join('');
+    host.append(lg);
+  }
+
+  const districts = [
+    ['文山區', 44.0, 900], ['內湖區', 45.8, 1563], ['萬華區', 47.5, 978], ['大同區', 64.0, 522],
+    ['南港區', 67.0, 1558], ['中山區', 68.3, 1675], ['中正區', 72.5, 2866], ['松山區', 75.9, 1388],
+    ['士林區', 81.6, 1892], ['信義區', 88.2, 1047], ['大安區', 115.0, 1368], ['北投區', 132.2, 1024]];
+  const short = d => d.replace('區', '');
+  const draw = {
+    canopy: h => meter(h, {now: 18, goal: 30, nowLabel: '2021 約 18%', goalLabel: '目標 30%'}),
+    widths: h => hbar(h, [{k: '≥ 2.0 m', v: 91.6}, {k: '≥ 2.5 m', v: 47.4}, {k: '≥ 3.0 m', v: 28.5}], {unit: ' km', decimals: 1}),
+    density: h => hbar(h, districts.map(d => ({k: short(d[0]), v: d[1]})), {ref: {v: 74.4, label: '全市'}, emphasis: ['文山', '大安'], decimals: 1, rowH: 29}),
+    empty: h => hbar(h, [...districts].sort((a, b) => b[2] - a[2]).map(d => ({k: short(d[0]), v: d[2]})), {rowH: 29}),
+    parks: h => stack(h, [
+      {k: '同名對上', v: 506, c: C.parks[0]}, {k: '中心點在範圍內', v: 96, c: C.parks[1]},
+      {k: '交叉口比對', v: 20, c: C.parks[2]}, {k: '沒有範圍', v: 191, c: C.parks[3], light: true}]),
+  };
+  document.querySelectorAll('.chart[data-chart]').forEach(h => draw[h.dataset.chart]?.(h));
+})();
+</script>
 <script>
 (() => {
   const stage = document.getElementById('stage');
