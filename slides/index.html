@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>樹蔭協作平台｜提案討論</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  /* palette from puma.taipei/hackathon */
+  --sky:#4459d1; --btn:#5f74f7; --ink:#14182b; --yellow:#f5c04a; --placard:#f2c230;
+  --placard-ink:#46300a; --green:#4fa046; --green-dk:#3e8441; --road:#5f6f91; --heart:#f26c93;
+  --paper:#fff; --paper-ink:#1d2340; --muted:#5a6080; --cream:#fff3cf; --line:#e4e7f5; --link:#2b3ec2;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --r:16px; --bd:3px solid var(--ink); --sh:6px 6px 0 var(--ink);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--sky);color:var(--paper-ink);font-family:var(--f-body);overflow:hidden}
+.viewport{position:fixed;inset:0;overflow:hidden}
+.stage{width:1280px;height:720px;position:absolute;left:50%;top:50%;transform-origin:center center;transform:translate(-50%,-50%)}
+.slide{position:absolute;inset:0;display:none;padding:56px 72px 64px;flex-direction:column}
+.slide.on{display:flex}
+.sky{color:#fff}
+.paper{background:var(--paper);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh)}
+.slide.paper{inset:16px 22px 22px 16px}
+
+.kicker{font-family:var(--f-mono);font-weight:600;font-size:18px;letter-spacing:.06em;display:inline-flex;align-items:center;gap:10px;margin-bottom:18px}
+.placard{display:inline-block;background:var(--placard);color:var(--placard-ink);border:var(--bd);border-radius:10px;padding:4px 14px;box-shadow:3px 3px 0 var(--ink);font-family:var(--f-mono);font-weight:600;font-size:16px}
+h1{font-size:76px;font-weight:900;line-height:1.1;letter-spacing:.01em}
+h2{font-size:46px;font-weight:900;line-height:1.2;margin-bottom:28px}
+h3{font-size:24px;font-weight:700;margin-bottom:8px}
+p,li{font-size:22px;line-height:1.6}
+.lead{font-size:28px;line-height:1.55;font-weight:500}
+.muted{color:var(--muted)}
+.sky .muted{color:#eef0ff}
+.mono{font-family:var(--f-mono)}
+.grow{flex:1}
+.row{display:flex;gap:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:var(--paper);color:var(--paper-ink);border:var(--bd);border-radius:var(--r);box-shadow:var(--sh);padding:22px 24px}
+.card.cream{background:var(--cream)}
+.card.green{background:#e6f3e2}
+.card.yellow{background:var(--yellow)}
+.card p,.card li{font-size:19px}
+.card ul{padding-left:1.1em}
+.big{font-family:var(--f-mono);font-weight:600;font-size:56px;line-height:1;color:var(--ink)}
+.big small{font-size:22px;margin-left:4px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:14px;font-weight:600;border:2px solid var(--ink);border-radius:999px;padding:2px 10px;background:#fff;color:var(--ink)}
+.tag.g{background:var(--green-dk);color:#fff}
+.tag.p{background:var(--heart);color:var(--ink)}
+.tag.b{background:var(--link);color:#fff}
+table{border-collapse:collapse;width:100%;font-size:19px}
+th,td{text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:15px;color:var(--muted);border-bottom:3px solid var(--ink)}
+.formula{font-family:var(--f-mono);font-size:26px;background:var(--cream);border:var(--bd);border-radius:12px;padding:18px 22px;box-shadow:4px 4px 0 var(--ink);margin-bottom:24px}
+.pipe{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.pipe .step{border:var(--bd);border-radius:12px;padding:8px 14px;font-weight:700;font-size:19px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.pipe .arrow{font-family:var(--f-mono);font-weight:600;font-size:22px}
+.loop{display:grid;grid-template-columns:1fr 220px 1fr;align-items:center;gap:20px}
+.hub{text-align:center;background:var(--yellow);border:var(--bd);border-radius:50%;width:220px;height:220px;display:grid;place-items:center;box-shadow:var(--sh);font-weight:900;font-size:26px;line-height:1.3}
+.flow{font-family:var(--f-mono);font-size:17px;color:var(--muted);margin-top:10px}
+.foot{position:absolute;left:72px;right:72px;bottom:26px;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:14px;color:var(--muted)}
+.sky .foot{color:#eef0ff}
+.tree{font-size:120px;line-height:1}
+.qs li{margin-bottom:14px}
+.src{font-family:var(--f-mono);font-size:14px;color:var(--muted);margin-top:auto}
+.sky .src{color:#eef0ff}
+
+nav{position:fixed;right:18px;bottom:16px;display:flex;gap:10px;align-items:center;z-index:5}
+nav button{font-family:var(--f-mono);font-weight:600;font-size:16px;background:var(--paper);color:var(--ink);border:var(--bd);border-radius:10px;box-shadow:3px 3px 0 var(--ink);width:44px;height:40px;cursor:pointer}
+nav button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;text-align:center}
+.bar{position:fixed;left:0;top:0;height:6px;background:var(--yellow);border-right:3px solid var(--ink);transition:width .25s}
+@media (prefers-reduced-motion:reduce){.bar{transition:none}}
+@media print{
+  html,body{overflow:visible;background:#fff}
+  nav,.bar{display:none}
+  .viewport{position:static;display:block}
+  .stage{transform:none!important;position:static;width:auto;height:auto}
+  .slide{position:relative;display:flex!important;width:1280px;height:720px;page-break-after:always;background:var(--sky)}
+  .slide.paper{background:#fff}
+  @page{size:1280px 720px;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="viewport"><div class="stage" id="stage">
+
+<!-- 1 -->
+<section class="slide sky">
+  <div class="kicker"><span class="placard">#1</span> PUMA 黑客松 · 把三千棵樹種回來</div>
+  <div class="grow" style="display:flex;flex-direction:column;justify-content:center">
+    <h1>樹蔭協作平台</h1>
+    <p class="lead" style="margin-top:20px;max-width:900px">市民找得到樹蔭、說得出哪裡要樹蔭；<br>政府看得到需求、交代得了進度。</p>
+    <div class="row" style="margin-top:36px">
+      <span class="tag">Shade Equity</span><span class="tag">GIS</span><span class="tag g">開放資料 × 市民回報</span>
+    </div>
+  </div>
+  <div class="foot"><span>提案討論稿 · 2026-10-16</span><span>← → 翻頁</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide paper">
+  <div class="kicker">01 · 題目</div>
+  <h2>2025 年，台北移除了 3,164 棵樹</h2>
+  <div class="grid3">
+    <div class="card"><div class="big">3,164</div><p style="margin-top:12px">2025 年移除的樹，市府說明多為病蟲害或自然死亡</p></div>
+    <div class="card"><div class="big">40<small>年</small></div><p style="margin-top:12px">東門市場附近的茄苳，原計畫移植保留，卻遭「誤砍」</p></div>
+    <div class="card cream"><h3>題目要的</h3><p>找出城市裡能重新種樹的空間，達到樹蔭公平；參考新加坡「見縫插樹」</p></div>
+  </div>
+  <p class="muted" style="margin-top:28px">作品以解法與可操作介面為主，不必真的串 API；移除紀錄未完整開放，可用模擬資料。</p>
+  <div class="src">來源：puma.taipei/hackathon#issue-1</div>
+</section>
+
+<!-- 3 -->
+<section class="slide sky">
+  <div class="kicker">02 · 對齊政見「都市微森林」</div>
+  <h2>3-30-300：每一個數字都要一種視角</h2>
+  <div class="grid3">
+    <div class="card"><div class="big">3</div><h3 style="margin-top:14px">窗前看得見 3 棵樹</h3><p class="muted">要 3D 與建物內部：從每戶、每層的窗外看</p></div>
+    <div class="card"><div class="big">30<small>%</small></div><h3 style="margin-top:14px">綠覆率 30%</h3><p class="muted">2021 年約 18%。2D 地圖算面積比例</p></div>
+    <div class="card"><div class="big">300<small>m</small></div><h3 style="margin-top:14px">300 公尺內有綠蔭公園</h3><p class="muted">2D 步行距離</p></div>
+  </div>
+  <p class="lead" style="margin-top:30px">政見第三項改革「涼感地圖與市民參與」：串接樹籍、氣象、體感溫度與<b>市民回報</b>，回報熱點作為增設樹木的依據。</p>
+  <div class="src">來源：puma.taipei/policies/都市微森林</div>
+</section>
+
+<!-- 4 -->
+<section class="slide paper">
+  <div class="kicker">03 · 提案</div>
+  <h2>一張地圖，兩個入口，一個共用的回報資料庫</h2>
+  <div class="loop grow">
+    <div class="card">
+      <span class="tag b">市民端</span>
+      <ul style="margin-top:12px"><li>找蔭、最蔭路線</li><li>回報想要樹蔭的地方，+1</li><li>追蹤進度</li><li>評價常用的樹蔭</li></ul>
+    </div>
+    <div class="hub">回報<br>資料庫</div>
+    <div class="card">
+      <span class="tag g">政府端</span>
+      <ul style="margin-top:12px"><li>需求熱點</li><li>可行性初審（自動）</li><li>進度回覆、不可種要說原因</li><li>移樹前公告</li></ul>
+    </div>
+  </div>
+  <p class="flow">開放資料 → 底圖與「能不能種」的初審　·　市民資料 → 需求與優先順序</p>
+</section>
+
+<!-- 5 -->
+<section class="slide paper">
+  <div class="kicker">04 · 市民端</div>
+  <h2>找得到、說得出、看得到進度</h2>
+  <div class="grid4">
+    <div class="card"><h3>找蔭</h3><p>附近哪段人行道有蔭、哪個公園樹多；輸入目的地看「最蔭路線」</p></div>
+    <div class="card cream"><h3>回報</h3><p>地圖釘一個點、選原因（通學、等公車）、附照片；別人可 +1</p></div>
+    <div class="card"><h3>追蹤</h3><p>「我的回報」看到狀態變化，收到通知</p></div>
+    <div class="card"><h3>評價</h3><p>常經過的樹蔭按「這裡很涼」、留一句感想</p></div>
+  </div>
+  <div class="card green" style="margin-top:28px"><p><b>回報當下就給答案：</b>系統比對附近有無空樹穴、人行道夠不夠寬，市民立刻知道這裡「容易種」還是「需要會勘」。</p></div>
+</section>
+
+<!-- 6 -->
+<section class="slide paper">
+  <div class="kicker">05 · 政府端</div>
+  <h2>回報不是石沉大海：狀態一條線走到底</h2>
+  <div class="pipe">
+    <span class="step">已收件</span><span class="arrow">→</span>
+    <span class="step">會勘中</span><span class="arrow">→</span>
+    <span class="step" style="background:#e6f3e2">可種・已排程</span><span class="arrow">/</span>
+    <span class="step" style="background:#ffe1ea">不可種・附原因</span><span class="arrow">→</span>
+    <span class="step" style="background:var(--yellow)">已種植</span>
+  </div>
+  <div class="grid2" style="margin-top:32px">
+    <div class="card"><h3>需求熱點 × 樹蔭缺口</h3><p>回報聚集區疊在缺蔭地圖上，自動標「空樹穴 / 寬人行道 / 需會勘」</p></div>
+    <div class="card"><h3>移樹前公告</h3><p>移除或移植前公告原因與補種計畫，回應「誤砍」事件</p></div>
+    <div class="card"><h3>使用洞察</h3><p>哪些樹蔭最常被評價、感想關鍵字：哪些樹該優先養護、不該移</p></div>
+    <div class="card"><h3>不可種也要說</h3><p>地下管線、寬度不足……公開原因，維持信任</p></div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide sky">
+  <div class="kicker">06 · 三種通報視角</div>
+  <h2>2D 街道、3D 街廓、建物內部</h2>
+  <div class="grid3">
+    <div class="card"><span class="tag">對應 30・300</span><h3 style="margin-top:12px">2D 街道</h3><p>地圖釘點；算人行道遮蔭率、空樹穴、300 m 內公園</p></div>
+    <div class="card"><span class="tag">對應 30</span><h3 style="margin-top:12px">3D 街廓</h3><p>建物陰影 + 樹蔭的全天曬點模擬，分出「大樓已遮住」與「真的需要樹」</p></div>
+    <div class="card"><span class="tag">對應 3</span><h3 style="margin-top:12px">建物內部</h3><p>選樓層與窗戶方向，看窗外幾棵樹、西曬多少；也可通報「窗外少樹」</p></div>
+  </div>
+  <p class="lead" style="margin-top:30px">延伸：大樓大廳、公有建築、校園中庭登錄為<b>涼適空間</b>，和樹蔭一起出現在「找蔭」裡。</p>
+  <div class="src">當天範圍：2D 完整；3D 做一個街廓；樓層視角做原型（建物資料用模擬樓高）</div>
+</section>
+
+<!-- 8 -->
+<section class="slide paper">
+  <div class="kicker">07 · 資料驗證（2026-10-16 下載）</div>
+  <h2>2D 夠用：找得到上萬個可補種的位置</h2>
+  <div class="grid4">
+    <div class="card"><div class="big" style="font-size:44px">90,395</div><p class="muted" style="margin-top:8px">行道樹，12 區齊全</p></div>
+    <div class="card"><div class="big" style="font-size:44px">72,011</div><p class="muted" style="margin-top:8px">公園樹木，486 座公園</p></div>
+    <div class="card"><div class="big" style="font-size:44px">57,548</div><p class="muted" style="margin-top:8px">樹穴（新工處 + 公園處合併）</p></div>
+    <div class="card"><div class="big" style="font-size:44px">1,215<small>km</small></div><p class="muted" style="margin-top:8px">人行道，15,053 段</p></div>
+  </div>
+  <div class="grid2" style="margin-top:26px">
+    <div class="card yellow"><div class="big" style="font-size:52px">16,781</div><p style="margin-top:8px"><b>候選空樹穴</b>：1.5 m 內沒有登錄的樹。遠超 3,164，但要現場抽查（可能座標偏移或新植未登錄）</p></div>
+    <div class="card cream"><div class="big" style="font-size:52px">47.4<small>km</small></div><p style="margin-top:8px"><b>寬而無樹的人行道</b>：淨寬 ≥ 2.5 m 且整段沒行道樹，共 798 段</p></div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide paper">
+  <div class="kicker">08 · 資料缺口</div>
+  <h2>缺的部分：用推估、模擬或 OSM 補上</h2>
+  <table>
+    <tr><th>缺什麼</th><th>影響</th><th>當天怎麼補</th></tr>
+    <tr><td>樹冠範圍</td><td>遮蔭率是近似值</td><td>由胸徑（中位 24 cm）、樹高推估，標明是推估</td></tr>
+    <tr><td>公園邊界</td><td>公園資料只有中心點</td><td>OpenStreetMap 公園多邊形：813 座對上 539 座，面積中位比 0.97</td></tr>
+    <tr><td>3D 建物</td><td>不在這批資料</td><td>模擬樓高做一個街廓</td></tr>
+    <tr><td>移除紀錄、回報、評價</td><td>未開放 / 尚不存在</td><td>模擬資料，README 與畫面標明</td></tr>
+    <tr><td>溫度、人流</td><td>不在這批資料</td><td>列入未來展望</td></tr>
+  </table>
+  <p class="muted" style="margin-top:20px">Google Maps 不能拿來抓公園邊界：Places API 只給點與框，條款也禁止擷取幾何存檔。</p>
+</section>
+
+<!-- 10 -->
+<section class="slide paper">
+  <div class="kicker">09 · 補種優先分數</div>
+  <h2>市民需求和開放資料一起排序</h2>
+  <div class="formula">Score = w₁·Demand + w₂·ShadeGap + w₃·Ready + w₄·Equity</div>
+  <div class="grid4">
+    <div class="card"><span class="tag p">Demand</span><p style="margin-top:10px">附近回報數與 +1 數</p></div>
+    <div class="card"><span class="tag">ShadeGap</span><p style="margin-top:10px">所在路段 1 − 遮蔭率</p></div>
+    <div class="card"><span class="tag g">Ready</span><p style="margin-top:10px">空樹穴 &gt; 寬人行道 &gt; 需會勘</p></div>
+    <div class="card"><span class="tag b">Equity</span><p style="margin-top:10px">越缺蔭的區加分越多</p></div>
+  </div>
+  <p class="lead" style="margin-top:28px">權重做成滑桿：政策權重一變，補種清單跟著重排。</p>
+</section>
+
+<!-- 11 -->
+<section class="slide sky">
+  <div class="kicker">10 · 2 分鐘 Demo 腳本</div>
+  <h2>一個市民、一位承辦，走完一次</h2>
+  <div class="card" style="padding:26px 30px">
+    <ol style="padding-left:1.3em">
+      <li>市民從捷運站走到學校，系統給一條最蔭路線</li>
+      <li>路上一段很曬，釘點回報；畫面顯示「附近有空樹穴，可快速補種」</li>
+      <li>切到 3D 街廓：曬點在大樓陰影外，是真的需要樹；切樓層視角，窗外只有 1 棵樹</li>
+      <li>承辦切到後台：這筆在熱點區、分數高，改成「已排程」</li>
+      <li>市民手機收到進度通知；收尾是全市「三千棵」進度條</li>
+    </ol>
+  </div>
+  <div class="src">回報、+1、評價、進度、移樹公告都是模擬資料</div>
+</section>
+
+<!-- 12 -->
+<section class="slide paper">
+  <div class="kicker">11 · 技術與時程</div>
+  <h2>資料松前處理好，當天只做介面與流程</h2>
+  <div class="grid2 grow">
+    <div class="card">
+      <h3>技術</h3>
+      <ul>
+        <li>前處理：Python（uv）+ GeoPandas / Shapely + pyproj，輸出 GeoJSON</li>
+        <li>地圖：MapLibre GL JS（2D + 建物拉伸 3D），SunCalc 算太陽位置</li>
+        <li>回報資料庫：Supabase 或 JSON</li>
+        <li>登入：模擬「以台北通登入」；要真登入就用 LINE / Google</li>
+      </ul>
+    </div>
+    <div class="card cream">
+      <h3>時程（10/24 16:00 截止）</h3>
+      <ul>
+        <li><b class="mono">10/23 前</b>　資料前處理</li>
+        <li><b class="mono">10/23 19:00</b>　線上提案</li>
+        <li><b class="mono">09:30–12:00</b>　市民端 2D</li>
+        <li><b class="mono">12:00–14:00</b>　政府端</li>
+        <li><b class="mono">14:00–15:30</b>　3D 與樓層視角</li>
+        <li><b class="mono">15:30–16:00</b>　README、提交</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slide paper">
+  <div class="kicker">12 · 未來展望</div>
+  <h2>每多一份資料，就把一個模擬換成真的</h2>
+  <table>
+    <tr><th>加入的資料</th><th>可以做成什麼</th></tr>
+    <tr><td>3D 建物、樓層、門牌</td><td>全市「窗前 3 棵樹」達成地圖、建物陰影全天模擬</td></tr>
+    <tr><td>地下管線、道路挖掘</td><td>回報當下就知道能不能種，「先有根域才准種樹」自動檢查</td></tr>
+    <tr><td>航照、光達樹冠</td><td>真實樹冠取代推估；綠覆率 30% 的進度</td></tr>
+    <tr><td>移除、修剪、健康履歷</td><td>取代模擬紀錄；移樹前自動公告</td></tr>
+    <tr><td>氣象、體感溫度、人流</td><td>涼感地圖；熱危害時推最蔭路線</td></tr>
+    <tr><td>各里高齡、低收入人口</td><td>樹蔭公平細化到里，可量化報告</td></tr>
+    <tr><td>台北通（iSSO）</td><td>實名一人一票，上任後由資訊局介接</td></tr>
+  </table>
+</section>
+
+<!-- 14 -->
+<section class="slide sky">
+  <div class="kicker">13 · 今天要討論的</div>
+  <h2>需要大家決定的事</h2>
+  <div class="grid2">
+    <div class="card">
+      <ol class="qs" style="padding-left:1.3em">
+        <li>分工：資料前處理、市民端、政府端、3D 誰負責？</li>
+        <li>Demo 街廓選哪裡？東門市場周邊（誤砍事件）？</li>
+        <li>3D 與樓層視角：當天做原型，還是只放未來展望？</li>
+      </ol>
+    </div>
+    <div class="card">
+      <ol class="qs" start="4" style="padding-left:1.3em">
+        <li>登入：純模擬，還是接 LINE 讓評審真的能 +1？</li>
+        <li>作品名稱？</li>
+        <li>「上任 100 天內要做什麼」寫哪幾條？</li>
+      </ol>
+    </div>
+  </div>
+  <div class="src">資料與腳本都在 repo：material/、scripts/</div>
+</section>
+
+</div></div>
+
+<nav aria-label="簡報翻頁">
+  <button id="prev" aria-label="上一頁">←</button>
+  <span class="count" id="count"></span>
+  <button id="next" aria-label="下一頁">→</button>
+</nav>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...document.querySelectorAll('.slide')];
+  const count = document.getElementById('count');
+  const bar = document.getElementById('bar');
+  let i = Math.min(Math.max(parseInt(location.hash.slice(1), 10) - 1 || 0, 0), slides.length - 1);
+
+  function fit() {
+    const s = Math.min(innerWidth / 1280, innerHeight / 720);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  function show(n) {
+    i = Math.min(Math.max(n, 0), slides.length - 1);
+    slides.forEach((el, k) => el.classList.toggle('on', k === i));
+    count.textContent = `${i + 1} / ${slides.length}`;
+    bar.style.width = `${((i + 1) / slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+  }
+  addEventListener('resize', fit);
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  let x0 = null;
+  addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, {passive: true});
+  addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+  fit(); show(i);
+})();
+</script>
+</body>
+</html>
