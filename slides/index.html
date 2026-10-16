@@ -69,6 +69,7 @@ th{font-family:var(--f-mono);font-size:15px;color:var(--muted);border-bottom:3px
 .sky .foot{color:#eef0ff}
 .tree{font-size:120px;line-height:1}
 .qs li{margin-bottom:14px}
+.src a{color:var(--link)}
 .src{font-family:var(--f-mono);font-size:14px;color:var(--muted);margin-top:auto}
 .sky .src{color:#eef0ff}
 
@@ -218,7 +219,7 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
   <table>
     <tr><th>缺什麼</th><th>影響</th><th>當天怎麼補</th></tr>
     <tr><td>樹冠範圍</td><td>遮蔭率是近似值</td><td>由胸徑（中位 24 cm）、樹高推估，標明是推估</td></tr>
-    <tr><td>公園邊界</td><td>公園資料只有中心點</td><td>OpenStreetMap 公園多邊形：813 座對上 539 座，面積中位比 0.97</td></tr>
+    <tr><td>公園邊界</td><td>公園資料只有中心點</td><td>用 OpenStreetMap 補：四分之三的公園（622／813）找得到範圍，其中約六成面積與官方差 20% 內；其餘用中心點估</td></tr>
     <tr><td>3D 建物</td><td>不在這批資料</td><td>模擬樓高做一個街廓</td></tr>
     <tr><td>移除紀錄、回報、評價</td><td>未開放 / 尚不存在</td><td>模擬資料，README 與畫面標明</td></tr>
     <tr><td>溫度、人流</td><td>不在這批資料</td><td>列入未來展望</td></tr>
@@ -233,11 +234,16 @@ nav .count{font-family:var(--f-mono);color:#fff;font-weight:600;min-width:64px;t
   <div class="formula">Score = w₁·Demand + w₂·ShadeGap + w₃·Ready + w₄·Equity</div>
   <div class="grid4">
     <div class="card"><span class="tag p">Demand</span><p style="margin-top:10px">附近回報數與 +1 數</p></div>
-    <div class="card"><span class="tag">ShadeGap</span><p style="margin-top:10px">所在路段 1 − 遮蔭率</p></div>
+    <div class="card"><span class="tag">ShadeGap</span><p style="margin-top:10px">所在路段 1 − 遮蔭率<sup>[1,2]</sup></p></div>
     <div class="card"><span class="tag g">Ready</span><p style="margin-top:10px">空樹穴 &gt; 寬人行道 &gt; 需會勘</p></div>
     <div class="card"><span class="tag b">Equity</span><p style="margin-top:10px">越缺蔭的區加分越多</p></div>
   </div>
   <p class="lead" style="margin-top:28px">權重做成滑桿：政策權重一變，補種清單跟著重排。</p>
+  <div class="src" style="line-height:1.6">
+    [1] 缺口 = 目標 − 現況：American Forests, <a href="https://treeequityscore.org/methodology">Tree Equity Score — Methods</a>（樹冠缺口 GAP）<br>
+    [2] 遮蔭率的樹冠由胸徑推估：McPherson, van Doorn &amp; Peper (2016), <a href="https://research.fs.usda.gov/treesearch/52933">Urban Tree Database and Allometric Equations</a>, USDA PSW-GTR-253<br>
+    目標值 30%：Konijnendijk (2023), <a href="https://doi.org/10.1007/s11676-022-01523-z">3–30–300 rule</a>, J. For. Res. 34(3)　·　建物陰影比樹蔭更降輻射溫：Middel et al. (2021), <a href="https://doi.org/10.1175/BAMS-D-20-0193.1">50 Grades of Shade</a>, BAMS 102(9)
+  </div>
 </section>
 
 <!-- 11 -->
